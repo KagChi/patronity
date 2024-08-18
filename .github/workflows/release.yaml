@@ -1,0 +1,71 @@
+name: Release Contents
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  release:
+    types: [created]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP Version
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: useblacksmith/setup-node@v5
+        with:
+          node-version-file: .node-version
+
+      - name: Install Node dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Linting
+        run: pnpm lint
+
+      - name: Compile Vite Requirements
+        run: pnpm build
+
+      - name: Create ZIP archive
+        if: github.event_name == 'push' || github.event_name == 'release'
+        run: zip -r release.zip LICENSE README.md vendor public app bootstrap config database resources routes storage tests artisan composer.json composer.lock package.json .env.example
+
+      - name: Create Staging Release
+        if: github.event_name == 'push' && github.event_name != 'release'
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "release.zip"
+          allowUpdates: true
+          tag: "staging"
+          replacesArtifacts: true
+          name: "Staging Build"
+          prerelease: true
+      
+      - name: Create Production Release
+        if: github.event_name == 'release'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./release.zip
+          asset_name: release.zip
+          asset_content_type: application/zip
