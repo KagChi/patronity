@@ -6,6 +6,10 @@ export default {
     content: [
         "./resources/**/*.blade.php",
         "./resources/**/*.tsx",
+        "./app/Filament/**/*.php",
+        "./resources/views/filament/**/*.blade.php",
+        "./vendor/filament/**/*.blade.php",
+        "./resources/views/components/**/*.blade.php"
     ],
     theme: {
         extend: {
@@ -14,8 +18,8 @@ export default {
             },
             objectPosition: {
                 "85-15": "85% 15%"
-            },
-        },
+            }
+        }
     },
     corePlugins: {
         aspectRatio: false
@@ -24,4 +28,4 @@ export default {
         aspectRatio,
         typography
     ]
-}
+};
