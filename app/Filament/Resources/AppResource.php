@@ -30,6 +30,8 @@ class AppResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
