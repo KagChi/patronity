@@ -27,12 +27,21 @@ class AuthSecretResource extends Resource
                 Forms\Components\Select::make("app_id")
                     ->required()
                     ->options(App::pluck('name', 'id')),
+                Forms\Components\TextInput::make('client_id')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('client_secret')
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('client_access_token')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('client_refresh_token')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\DateTimePicker::make('expires_at')
+                    ->disabled()
+                    ->default(now()->addMonth())
             ]);
     }
 
@@ -42,6 +51,10 @@ class AuthSecretResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('app.name')
                     ->sortable(),
+                Tables\Columns\TextColumn::make('client_id')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('client_secret')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('client_access_token')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('client_refresh_token')
@@ -50,6 +63,9 @@ class AuthSecretResource extends Resource
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('expires_at')
                     ->dateTime()
                     ->sortable(),
             ])

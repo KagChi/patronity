@@ -10,10 +10,16 @@ class AuthSecret extends Model
     use HasFactory;
 
     protected $fillable = [
-        "client_access_token", "client_refresh_token", "app_id"
+        "client_access_token",
+        "client_refresh_token",
+        "app_id",
+        "client_id",
+        "client_secret",
+        "expires_at"
     ];
 
-    public function app() {
+    public function app()
+    {
         return $this->belongsTo(App::class);
     }
 }
