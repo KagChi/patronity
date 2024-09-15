@@ -20,7 +20,8 @@ class Member extends Model
         'next_charge_date',
         'cancel_date',
         'access_expiration_date',
-        'app_id'
+        'app_id',
+        'will_pay_amount_cents'
     ];
 
     public function app()

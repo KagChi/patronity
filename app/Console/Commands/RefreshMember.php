@@ -39,7 +39,7 @@ class RefreshMember extends Command
 
                     $response = Http::withHeaders([
                         'Authorization' => 'Bearer ' . $authSecret->client_access_token,
-                    ])->get("https://www.patreon.com/api/oauth2/v2/campaigns/" . $app->patreon_id . "/members?include=user,currently_entitled_tiers&fields[member]=patron_status,email,last_charge_date,last_charge_status,next_charge_date,note,patron_status,pledge_relationship_start&fields[user]=full_name,social_connections&page[size]=10");
+                    ])->get("https://www.patreon.com/api/oauth2/v2/campaigns/" . $app->patreon_id . "/members?include=user,currently_entitled_tiers&fields[member]=will_pay_amount_cents,patron_status,email,last_charge_date,last_charge_status,next_charge_date,note,patron_status,pledge_relationship_start&fields[user]=full_name,social_connections&page[size]=10");
 
                     $result = $response->json();
 
@@ -88,7 +88,8 @@ class RefreshMember extends Command
                                 'join_date' => $memberData['attributes']['pledge_relationship_start'],
                                 'last_charge_date' => $memberData['attributes']['last_charge_date'],
                                 'next_charge_date' => $memberData['attributes']['next_charge_date'],
-                                'cancel_date' => $memberData['attributes']['patron_status'] === 'declined' ? now() : null
+                                'cancel_date' => $memberData['attributes']['patron_status'] === 'declined' ? now() : null,
+                                'will_pay_amount_cents' => $memberData['attributes']['will_pay_amount_cents'],
                             ]);
                         } else {
                             Member::create([
@@ -101,6 +102,7 @@ class RefreshMember extends Command
                                 'last_charge_date' => $memberData['attributes']['last_charge_date'],
                                 'next_charge_date' => $memberData['attributes']['next_charge_date'],
                                 'cancel_date' => $memberData['attributes']['patron_status'] === 'declined' ? now() : null,
+                                'will_pay_amount_cents' => $memberData['attributes']['will_pay_amount_cents'],
                                 'app_id' => $app->id,
                             ]);
                         }

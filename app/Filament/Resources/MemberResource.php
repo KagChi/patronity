@@ -38,6 +38,9 @@ class MemberResource extends Resource
                 Forms\Components\TextInput::make('status')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('will_pay_amount_cents')
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\DatePicker::make('join_date')
                     ->required(),
                 Forms\Components\TextInput::make('last_charge_date')
@@ -66,6 +69,14 @@ class MemberResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('status')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('will_pay_amount_cents')
+                    ->searchable()
+                    ->formatStateUsing(function ($state) {
+                        $cents = is_numeric($state) ? (int) $state : 0;
+                        $dollars = $cents / 100;
+                        return '$' . number_format($dollars, 2);
+                    })
+                    ->label('Will Pay Amount'),
                 Tables\Columns\TextColumn::make('join_date')
                     ->date()
                     ->sortable(),
