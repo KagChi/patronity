@@ -28,7 +28,7 @@ class RefreshToken extends Command
      */
     public function handle()
     {
-        AuthSecret::chunk(50, function ($authSecrets) {
+        AuthSecret::chunk(10, function ($authSecrets) {
             foreach ($authSecrets as $authSecret) {
                 try {
                     $response = Http::withOptions([])

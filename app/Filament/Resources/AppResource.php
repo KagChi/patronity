@@ -23,6 +23,9 @@ class AppResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->columnSpanFull(),
+                Forms\Components\TextInput::make('patreon_id')
+                    ->required()
+                    ->columnSpanFull()
             ]);
     }
 
@@ -33,6 +36,8 @@ class AppResource extends Resource
                 Tables\Columns\TextColumn::make('id')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
+                    ->sortable(),
+                    Tables\Columns\TextColumn::make('patreon_id')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
