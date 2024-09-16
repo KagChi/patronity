@@ -4,9 +4,10 @@ WORKDIR /tmp/build
 
 COPY . /tmp/build
 
-RUN apt-get update && apt-get install git unzip -y
-
-RUN docker-php-ext-install mysqli
+RUN apt-get update && apt-get install -y \
+    libicu-dev \
+    libzip-dev \
+    && docker-php-ext-install intl zip mysqli
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
@@ -18,9 +19,10 @@ FROM php:8.3.2-apache
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install git unzip -y
-
-RUN docker-php-ext-install mysqli
+RUN apt-get update && apt-get install -y \
+    libicu-dev \
+    libzip-dev \
+    && docker-php-ext-install intl zip mysqli
 
 COPY --from=build-stage /tmp/build/vendor /app/vendor
 COPY --from=build-stage /tmp/build/public /app/public
