@@ -1,19 +1,24 @@
-FROM php:8.3.2-apache AS build-stage
+FROM ghcr.io/hazmi35/node:20-dev AS node-build
 
 WORKDIR /tmp/build
 
 COPY . /tmp/build
 
-RUN apt-get update && apt-get install -y \
-    libicu-dev \
-    libzip-dev \
-    && docker-php-ext-install intl zip mysqli
+RUN apt-get update && apt-get install -y libicu-dev libzip-dev git python3
+
+RUN corepack enable && corepack prepare pnpm@latest
+
+RUN pnpm install --frozen-lockfile && pnpm run build
+
+FROM php:8.3.2-apache AS build-stage
+
+WORKDIR /tmp/build
+
+COPY --from=node-build /tmp/build /tmp/build
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 RUN composer install --prefer-dist --no-progress --no-suggest
-
-RUN pnpm install --frozen-lockfile && pnpm run dev
 
 FROM php:8.3.2-apache
 
