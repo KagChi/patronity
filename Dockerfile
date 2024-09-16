@@ -49,6 +49,7 @@ COPY --from=build-stage /tmp/build/composer.json /app/composer.json
 COPY --from=build-stage /tmp/build/composer.lock /app/composer.lock
 COPY --from=build-stage /tmp/build/package.json /app/package.json
 
-RUN php artisan migrate --force
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
-CMD php artisan serve --host=0.0.0.0 --port=8000
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
