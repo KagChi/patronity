@@ -6,7 +6,7 @@ COPY . /tmp/build
 
 RUN apt-get update && apt-get install git unzip -y
 
-RUN docker-php-ext-install mysqli pdo mbstring
+RUN docker-php-ext-install mysqli
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
