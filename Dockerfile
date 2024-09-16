@@ -18,6 +18,10 @@ FROM php:8.3.2-apache
 
 WORKDIR /app
 
+RUN apt-get update && apt-get install git unzip -y
+
+RUN docker-php-ext-install mysqli
+
 COPY --from=build-stage /tmp/build/vendor /app/vendor
 COPY --from=build-stage /tmp/build/public /app/public
 COPY --from=build-stage /tmp/build/app /app/app
@@ -32,5 +36,7 @@ COPY --from=build-stage /tmp/build/artisan /app/artisan
 COPY --from=build-stage /tmp/build/composer.json /app/composer.json
 COPY --from=build-stage /tmp/build/composer.lock /app/composer.lock
 COPY --from=build-stage /tmp/build/package.json /app/package.json
+
+RUN php artisan migrate --force
 
 CMD php artisan serve --host=0.0.0.0 --port=8000
