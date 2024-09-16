@@ -14,6 +14,11 @@ FROM php:8.3.2-apache AS build-stage
 
 WORKDIR /tmp/build
 
+RUN apt-get update && apt-get install -y \
+    libicu-dev \
+    libzip-dev \
+    && docker-php-ext-install intl zip mysqli
+
 COPY --from=node-build /tmp/build /tmp/build
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
