@@ -10,7 +10,7 @@ RUN corepack enable && corepack prepare pnpm@latest
 
 RUN pnpm install --frozen-lockfile && pnpm run build
 
-FROM php:8.2-fpm-alpine
+FROM php:8.3-fpm-alpine
 
 WORKDIR /app
 
