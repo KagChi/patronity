@@ -21,7 +21,7 @@ RUN apk add --no-cache --update libcurl caddy libzip-dev libpng-dev postgresql-d
 
 # Configure php extensions
 RUN docker-php-ext-configure zip \
-    && docker-php-ext-install gd pdo_pgsql pdo_mysql zip
+    && docker-php-ext-install mysqli intl gd pdo_pgsql pdo_mysql zip
 
 # Install composer and the dependencies
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
