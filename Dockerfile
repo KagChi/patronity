@@ -4,7 +4,7 @@ WORKDIR /tmp/build
 
 COPY . .
 
-RUN apk add --no-cache libicu-dev libzip-dev git python3
+RUN apk add --no-cache libcurl libzip-dev git python3
 
 RUN corepack enable && corepack prepare pnpm@latest
 
